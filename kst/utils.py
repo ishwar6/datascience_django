@@ -66,3 +66,23 @@ def getUnsolvedQuestion(user, state):
             return question
     else:
         return -1
+
+
+def getUnsolvedQLoop(user, chapter, state, node):
+    '''It chnges current question of user depending upno which were unsolved by him in
+    given state else will go to next state and gives again unsolved questions'''
+
+    question = getUnsolvedQuestion(user, state)
+    print(question)
+    if question == -1:
+        print('In getunsolvedquestionLOOOOP')
+        print('Details here are:----', state, user, node)
+        state, node = switch_nodes(user, chapter, state, node, 1)
+        if node == -1 or node == 6:
+            return end_assessment(user)
+        else:
+            getUnsolvedQLoop(user, state, node)
+    print('In loop final getunsolved questionloooop', question)
+    return question
+
+    ###########################__________ GET UNSOLVED QUESTION___________######################################
