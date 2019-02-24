@@ -144,3 +144,54 @@ class QuestionList(generics.GenericAPIView):
      2. If somehow student stops the assignment in middle, GET will give same state as it was earlier
 
     '''
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+
+            cquestion = CurrentQuestion.objects.filter(user=request.user)
+            if cquestion.exists():
+                cquestion = cquestion.first().question
+                serializer = AssessmentQuestionSerializer(cquestion)
+                print('GET ALREADY DONE')
+                return Response(serializer.data)
+
+            else:
+                current_chapter = chapter_switch(request.user)
+                if current_chapter:
+                    print('current chapter is', current_chapter)
+                    state, node = getNodeState(current_chapter, request.user)
+                    if state == 6:
+                        return Response({
+                            'status': False,
+                            'detail': 'Congrts, ASSESSMENT finished'
+                        })
+                    question = getUnsolvedQLoop(
+                        request.user, current_chapter, state, node)
+                    if question != 6:
+                        print(' GET REQ created first current question instance')
+                        serializer = AssessmentQuestionSerializer(question)
+                        return Response(serializer.data)
+                    print('GET REQUEST DETAILS', current_chapter, state, node)
+                return Response({
+                    'status': False,
+                    'detail': 'Congrts, ASSESSMENT finished'
+                })
+
+
+'''
+POST DO:
+
+1. TO give answer, check it and store score for student of that question
+2. TO Switch chapters if one ends or if one's assessment finishes in middle
+3. To switch nodes of a particular chapter
+
+'''
+
+
+def getNode(request):
+    chapter = Chapter.objects.get(id=2)
+    a = getNodeState(chapter)
+    context = {
+        'a': a
+    }
+    return render(request, 'index.html', context)
