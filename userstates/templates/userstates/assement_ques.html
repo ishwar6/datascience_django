@@ -1,0 +1,61 @@
+{% extends 'chapters/base.html' %}
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" media="screen" href="{% static 'userstates/css/assessmentQuestions.css' %}" />
+
+<div class="assessmentQuestions">
+
+  <div class="assessmentQuestions-a">
+    <h2>{{ chapter_title }}</h2>
+    <div class="assessmentQuestions-content">
+      <h3>{{currentquestion.id}}</h3>
+      <p>{{currentquestion.text }} </p>
+      {% if currentquestion.question_image  %}
+      <img id ='image-question' src=" {{ currentquestion.question_image.url }}" height="250px" width="250px">
+      {% endif %}
+    </div>
+    <form class="normalForm" method="POST" action = "{% url 'assess:first' %}"  data-url="{% url 'assess:first'  %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="normalForm-input">
+
+        {% if currentquestion.integer_type %}
+        <div class="input-text">
+          <label for="integerType">Enter your answer</label>
+          <input type="number" name="integertype" id="integerType">
+        </div>
+        {% endif %}
+        {% if currentquestion.single_option %}  
+        <div class="input-singleChoice">
+        <input type="text" id="singleChoiceInput" name="rad">
+        <button type="button" onclick="singleChoice(this,1)" >{{currentquestion.option1}}</button>
+        <button type="button" onclick="singleChoice(this,2)" >{{currentquestion.option2}}</button>
+        <button type="button" onclick="singleChoice(this,3)" >{{currentquestion.option3}}</button>
+        <button type="button" onclick="singleChoice(this,4)" >{{currentquestion.option4}}</button>
+      </div>
+      {% endif %}
+      {% if not currentquestion.integer_type %}
+      {% if not currentquestion.single_option %}
+      <div class="input-multipleChoice">
+        <input type="text" id="InputMultiple1" name="one" value="0">
+          <input type="text" id="InputMultiple2" name="two" value="0">
+          <input type="text" id="InputMultiple3" name="three" value="0">
+          <input type="text" id="InputMultiple4" name="four" value="0">
+          <button type="button" onclick="multipleChoice(this,'#InputMultiple1')" >{{currentquestion.option1}}</button>
+          <button type="button" onclick="multipleChoice(this,'#InputMultiple2')" >{{currentquestion.option2}}</button>
+          <button type="button" onclick="multipleChoice(this,'#InputMultiple3')" >{{currentquestion.option3}}</button>
+          <button type="button" onclick="multipleChoice(this,'#InputMultiple4')" >{{currentquestion.option4}}</button>
+        </div>
+        {% endif %}
+        {% endif %}
+      </div>
+      <div style="display: flex">
+        <button class="submit-button" onclick="submitForm()"  type="submit">Submit</button>
+      </div>
+      </form>
+    </div>
+</div>
+{% block javascript %}
+    <script src="{% static 'userstates/js/assessmentQuestions.js' %}" ></script>
+{% endblock %}
+{% endblock %}
