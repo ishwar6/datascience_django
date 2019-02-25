@@ -277,10 +277,12 @@ def switch_nodes(user, chapter, state, node, jump):
 
 
 def save_chapter(user, chapter, state=None, node = None):
+    ''' To save the data in student status with or without state and node provided'''
+
     print('In save chaper ', user, chapter, state, '------', node)
     old = StudentStatus.objects.filter(Q(user= user) & Q(chapter = chapter))
     if old.exists():
-        print('Old in save existins')
+        print('Old student status in save_chapter existing')
         old = old.first()
         if state and node:
             old.state = state
