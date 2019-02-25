@@ -12,7 +12,7 @@ from kst.models import AssessmentQuestion as Question
 # from content.models import CurrentActiveNode, CurrentActiveState
 from django.db.models import Q
 
-
+from kst.utils import *
 # import utility_kst
 import random
 User = get_user_model()
@@ -546,4 +546,33 @@ User = get_user_model()
 class Assessment(View):
 
     def get(self, request, *args, **kwargs):
-        pass
+        if request.user.is_authenticated:
+
+            cquestion = CurrentQuestion.objects.filter(user=request.user)
+            if cquestion.exists():
+                cquestion = cquestion.first().question
+                serializer = AssessmentQuestionSerializer(cquestion)
+                print('GET ALREADY DONE')
+                return Response(serializer.data)
+
+            else:
+                current_chapter = chapter_switch(request.user)
+                if current_chapter:
+                    print('current chapter is', current_chapter)
+                    state, node = getNodeState(current_chapter, request.user)
+                    if state == 6:
+                        return Response({
+                            'status': False,
+                            'detail': 'Congrts, ASSESSMENT finished'
+                        })
+                    question = getUnsolvedQLoop(
+                        request.user, current_chapter, state, node)
+                    if question != 6:
+                        print(' GET REQ created first current question instance')
+                        serializer = AssessmentQuestionSerializer(question)
+                        return Response(serializer.data)
+                    print('GET REQUEST DETAILS', current_chapter, state, node)
+                return Response({
+                    'status': False,
+                    'detail': 'Congrts, ASSESSMENT finished'
+                })
