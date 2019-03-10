@@ -561,7 +561,7 @@ class Assessment(View):
                     print('current chapter is', current_chapter)
                     state, node = getNodeState(current_chapter, request.user)
                     if state == 6:
-                        return Response({
+                        return JsonResponse({
                             'status': False,
                             'detail': 'Congrts, ASSESSMENT finished'
                         })
@@ -570,9 +570,9 @@ class Assessment(View):
                     if question != 6:
                         print(' GET REQ created first current question instance')
                         serializer = AssessmentQuestionSerializer(question)
-                        return Response(serializer.data)
+                        return JsonResponse(serializer.data)
                     print('GET REQUEST DETAILS', current_chapter, state, node)
-                return Response({
+                return JsonResponse({
                     'status': False,
                     'detail': 'Congrts, ASSESSMENT finished'
                 })

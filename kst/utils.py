@@ -4,6 +4,8 @@ from django.db.models import Q
 import random
 
 
+STANDARD = 10
+
 def chapter_switch(user = None):
     '''This function checks the chapter 
     already assessed by student and then return the next chapter
@@ -15,7 +17,7 @@ def chapter_switch(user = None):
         student_record = StudentStatus.objects.filter(user = user)
         for record in student_record:
             completed_chapters.append(record.chapter)
-        standard = user.standard
+        standard = STANDARD
         chapters = Chapter.objects.filter(standard = standard)
         for chapter in chapters:
             list_of_chapters.append(chapter)
