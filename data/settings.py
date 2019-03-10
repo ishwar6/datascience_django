@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'states',
     'kst',
-    'userstates'
+    'userstates',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
