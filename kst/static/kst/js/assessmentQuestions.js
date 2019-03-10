@@ -93,7 +93,10 @@ function addInputs(responseData) {
     formType = 3;
     document.querySelector(".normalForm-input").innerHTML = `
         <div class="input-multipleChoice">
-        <input type="text" id="singleChoiceInput" name="rad">
+        <input type="text" id="InputMultiple1" name="op1" value="0">
+                    <input type="text" id="InputMultiple2" name="op2" value="0">
+                    <input type="text" id="InputMultiple3" name="op3" value="0">
+                    <input type="text" id="InputMultiple4" name="op4" value="0">
         <button type="button" onclick="multipleChoice(this,'1InputMultiple')" >${
           responseData.option1
         }</button>
@@ -156,6 +159,7 @@ $(document).ready(function() {
     console.log(errorThrown);
   }
 });
+
 function getCookie(name) {
   var cookieValue = null;
   if (document.cookie && document.cookie !== "") {

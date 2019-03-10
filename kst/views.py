@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
-
+import random
 
 from django.http import Http404
 from django.shortcuts import get_list_or_404, render
@@ -14,6 +14,7 @@ from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from .serializers import AssessmentQuestionSerializer
+import datetime
 
 
 # models import
@@ -40,6 +41,7 @@ class QuestionList(generics.GenericAPIView):
         return AssessmentQuestion.objects.all()
 
     def post(self, request, *args, **kwargs):
+        print(request.POST)
         user = request.user
         current_question = CurrentQuestion.objects.filter(user=user)
         if current_question.exists():
@@ -79,6 +81,7 @@ class QuestionList(generics.GenericAPIView):
                         correct = False
                 elif current_question.single_option:
                     p = int(request.POST.get('rad', 0))
+                    a = 1
 
                     if(current_question.op1):
                         a = 1
@@ -164,6 +167,9 @@ class QuestionList(generics.GenericAPIView):
                     user, chapter, state, student_status.node, jump)
                 print('In post final call', outer_state, user, outer_node)
                 if outer_state == 6:
+                    cq = CurrentQuestion.objects.filter(user=user).first()
+                    cq.assess = True
+                    cq.save()
                     return JsonResponse({
                         'status': False,
                         'empty': True,
@@ -202,7 +208,10 @@ class QuestionList(generics.GenericAPIView):
 
             cquestion = CurrentQuestion.objects.filter(user=request.user)
             if cquestion.exists():
+                if cquestion.first().assess:
+                    return redirect('check:result')
                 cquestion = cquestion.first().question
+
                 serializer = AssessmentQuestionSerializer(cquestion)
                 print('GET ALREADY DONE')
                 context = {
@@ -216,6 +225,9 @@ class QuestionList(generics.GenericAPIView):
                     print('current chapter is', current_chapter)
                     state, node = getNodeState(current_chapter, request.user)
                     if state == 6:
+                        cq = CurrentQuestion.objects.filter(user=user).first()
+                        cq.assess = True
+                        cq.save()
                         return Response({
                             'status': False,
                             'detail': 'Congrts, ASSESSMENT finished'
@@ -227,10 +239,13 @@ class QuestionList(generics.GenericAPIView):
                         serializer = AssessmentQuestionSerializer(question)
 
                         context = {
-                            'currentquestion': cquestion
+                            'currentquestion': question
                         }
                         return render(request, 'kst/kst.html', context)
-                    print('GET REQUEST DETAILS', current_chapter, state, node)
+
+                cq = CurrentQuestion.objects.filter(user=user).first()
+                cq.assess = True
+                cq.save()
 
                 return Response({
                     'status': False,
@@ -257,3 +272,39 @@ def getNode(request):
         'a': a
     }
     return render(request, 'index.html', context)
+
+
+def result(request):
+    sr1 = random.randint(30, 60)
+    sr2 = random.randint(40, 50)
+    sr3 = random.randint(50, 70)
+    sr4 = random.randint(10, 30)
+
+    r1 = random.randint(10, 40)
+    r2 = random.randint(10, 20)
+    r3 = random.randint(20, 40)
+    r4 = 100-r1-r2-r3
+
+    rr1 = random.randint(40, 50)
+    rr2 = random.randint(20, 50)
+    rr3 = 100-rr1-rr2
+
+    context = {
+        'r1': r1,
+        'r2': r2,
+        'r3': r3,
+        'r4': r4,
+        'sr1': sr1,
+        'sr2': sr2,
+        'sr3': sr3,
+        'sr4': sr4,
+
+
+        'rr1': rr1,
+        'rr2': rr2,
+        'rr3': rr3,
+        'time': datetime.datetime.now()
+
+
+    }
+    return render(request, 'kst/result.html', context)

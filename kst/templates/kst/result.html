@@ -1,0 +1,212 @@
+{% extends 'kst/base.html' %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h2 class="display-4">Congrats! Your assessment has been finished</h2>
+
+
+        <br>
+    </div>
+
+
+    <div id="resizable" style="height: 370px;">
+
+        <div id="chartContainer3" style="height: 100%; width: 100%; margin: 20px;"></div>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-sm">
+            <div style="height: 370px;">
+
+
+                <div id="chartContainer" style="height: 300px; width: 100%; margin: 10px;"></div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div style="height: 370px;">
+
+
+                <div id="chartContainer1" style="height: 100%; width: 100%; margin: 10px;"></div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<script>
+    window.onload = function () {
+        var rr1 = parseInt("{{rr1}}");
+        var rr2 = parseInt("{{rr2}}");
+        var rr3 = parseInt("{{rr3}}");
+        var r1 = parseInt("{{r1}}");
+        var r2 = parseInt("{{r2}}");
+        var r3 = parseInt("{{r3}}");
+        var r4 = parseInt("{{r4}}");
+        var sr1 = parseInt("{{sr1}}");
+        var sr2 = parseInt("{{sr2}}");
+        var sr3 = parseInt("{{sr3}}");
+        var sr4 = parseInt("{{sr4}}");
+
+
+
+
+
+        // Construct options first and then pass it as a parameter
+        var options1 = {
+            animationEnabled: true,
+            animationDuration: 5000,
+
+
+            title: {
+                text: "Questions Asked"
+            },
+            subtitles: [{
+                text: "Ratio of questions asked"
+            }],
+            data: [{
+                type: "column", //change it to line, area, bar, pie, etc
+                toolTipContent: "<b>{label}</b>: {y}%",
+                showInLegend: "true",
+                legendText: "{label}",
+                indexLabelFontSize: 16,
+                indexLabel: "{label} - {y}%",
+
+                showInLegend: true,
+                dataPoints: [{
+                        y: rr1,
+                        label: "Easy"
+                    },
+                    {
+                        y: rr2,
+                        label: "Medium"
+                    },
+
+                    {
+                        y: rr3,
+                        label: "Hard"
+                    },
+
+
+                ]
+            }]
+        };
+
+        $("#resizable").resizable({
+            create: function (event, ui) {
+                //Create chart.
+                $("#chartContainer1").CanvasJSChart(options1);
+            },
+            resize: function (event, ui) {
+                //Update chart size according to its container size.
+                $("#chartContainer1").CanvasJSChart().render();
+            }
+        });
+
+
+
+
+
+
+        var options = {
+            title: {
+                text: "Questions asked in your assessment"
+            },
+            subtitles: [{
+                text: "As on {{time}}"
+            }],
+            animationEnabled: true,
+            animationDuration: 2000,
+            data: [{
+                type: "pie",
+                startAngle: 20,
+                toolTipContent: "<b>{label}</b>: {y}%",
+                showInLegend: "true",
+                legendText: "{label}",
+                indexLabelFontSize: 16,
+                indexLabel: "{label} - {y}%",
+                dataPoints: [{
+                        y: r1,
+                        label: "Algebra"
+                    },
+                    {
+                        y: r2,
+                        label: "Geometry"
+                    },
+                    {
+                        y: r3,
+                        label: "Number System"
+                    },
+
+                    {
+                        y: r4,
+                        label: "Others"
+                    },
+
+
+
+
+                ]
+            }]
+        };
+        var options3 = {
+            title: {
+                text: "Your Score"
+            },
+            subtitles: [{
+                text: "As on last attempted assessment"
+            }],
+            animationEnabled: true,
+            animationDuration: 3000,
+            data: [{
+                type: "column",
+                startAngle: 40,
+                toolTipContent: "You got {y}% in {label} ",
+                showInLegend: "true",
+                legendText: "{label}",
+                indexLabelFontSize: 16,
+                indexLabel: "{y}%",
+                dataPoints: [{
+                        y: sr1,
+                        label: "Algebra"
+                    },
+                    {
+                        y: sr2,
+                        label: "Geometry"
+                    },
+                    {
+                        y: sr3,
+                        label: "Number System"
+                    },
+
+                    {
+                        y: sr4,
+                        label: "Others"
+                    },
+
+
+
+
+                ]
+            }]
+        };
+        $("#chartContainer").CanvasJSChart(options);
+        $("#chartContainer3").CanvasJSChart(options3);
+    }
+</script>
+
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script src="https://canvasjs.com/assets/script/jquery-ui.1.11.2.min.js"></script>
+<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+
+
+{% endblock %}

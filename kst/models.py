@@ -102,6 +102,8 @@ class StudentStatus(models.Model):
         default=0, help_text='To save score of student from question assessment session')
     empty = models.BooleanField(
         default=False, help_text='Empty true if chapter have no state or no node')
+    assess = models.IntegerField(
+        default=0, help_text='If in assessment=0, if assessment learnt = 1, if assess=2 content learning active, then assessment of that learning =3')
 
     objects = StudentStatusManager()
 
@@ -167,9 +169,25 @@ class CurrentQuestion(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     question = models.ForeignKey(AssessmentQuestion, on_delete=models.DO_NOTHING, blank=True,
                                  null=True, help_text=' Gives current question only if chapter is running currently ')
+    assess = models.BooleanField(
+        default=False, help_text='True if assessment is finieshed for the user')
 
     def __str__(self):
         return 'For user' + str(self.user) + 'current question is' + str(self.question)
 
     def get_question(self):
         return self.question
+
+
+class Result(models.Model):
+    r1 = models.IntegerField(default=0)
+    r2 = models.IntegerField(default=0)
+    r3 = models.IntegerField(default=0)
+    r4 = models.IntegerField(default=0)
+    sr1 = models.IntegerField(default=0)
+    sr2 = models.IntegerField(default=0)
+    sr3 = models.IntegerField(default=0)
+    sr4 = models.IntegerField(default=0)
+    rr1 = models.IntegerField(default=0)
+    rr2 = models.IntegerField(default=0)
+    rr3 = models.IntegerField(default=0)
