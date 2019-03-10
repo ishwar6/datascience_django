@@ -11,5 +11,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('check/', include('kst.urls')),
     path('states/', include('states.urls')),
-    path('u/', include('userstates.urls'))
+    path('u/', include('userstates.urls')),
+
 ]

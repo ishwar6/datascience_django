@@ -1,9 +1,18 @@
-from django.urls import path
-from .views import base
+from django.conf.urls import include, url
+from rest_framework import routers
 
-app_name = 'kst'
+from .views import (
+
+    QuestionList, getNode
+
+)
+
+
+app_name = 'check'
 
 urlpatterns = [
 
-    path('', base, name='base')
+    url("^list/$", QuestionList.as_view()),
+    url("^node/$", getNode),
+
 ]
