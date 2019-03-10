@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 
 
 from django.http import Http404
@@ -60,7 +61,7 @@ class QuestionList(generics.GenericAPIView):
                     })
 
             # checking weather the current question is matching or not with passed question id
-            if int(current_question.id) != int(request.data.get('id', None)):
+            if int(current_question.id) == int(request.POST.get('id', None)):
                 return Response({
                     'status': False,
                     'detail': "Your POST request passed question ID was incorrect for current active question of this student"
@@ -69,24 +70,44 @@ class QuestionList(generics.GenericAPIView):
             else:
                 # checking the given answer by student is correct or not
                 if current_question.integer_type:
-                    if int(request.data.get('int', '3266')) == int(current_question.integeral_answer):
+                    if int(request.POST.get('int', '3266')) == int(current_question.integeral_answer):
                         print('answer correct')
                         correct = True
                         # correct answer for integral question, move the student in next state of present chapter
                     else:
                         print('Incorrect Answer')
                         correct = False
+                elif current_question.single_option:
+                    p = int(request.POST.get('rad', 0))
+
+                    if(current_question.op1):
+                        a = 1
+                    if(current_question.op2):
+                        a = 2
+                    if(current_question.op3):
+                        a = 3
+                    if(current_question.op4):
+                        a = 4
+
+                    if(p == a):
+                        print('answer correct')
+                        correct = True
+                        # correct answer for integral question, move the student in next state of present chapter
+
+                    else:
+                        print('Incorrect multiple answer')
+                        correct = False
 
                 else:
 
                     p = int(current_question.op1) == int(
-                        request.data.get('op1'))
+                        request.POST.get('op1'))
                     q = int(current_question.op2) == int(
-                        request.data.get('op2'))
+                        request.POST.get('op2'))
                     r = int(current_question.op3) == int(
-                        request.data.get('op3'))
+                        request.POST.get('op3'))
                     s = int(current_question.op4) == int(
-                        request.data.get('op4'))
+                        request.POST.get('op4'))
 
                     if(p & q & r & s):
                         print('answer correct')
@@ -107,17 +128,34 @@ class QuestionList(generics.GenericAPIView):
                 else:
                     jump = StudentStatus.objects.updateJump(
                         user, chapter, correct)
-                    QuestionResponse.objects.create(
-                        user=user,
-                        question=current_question,
-                        op1=request.data.get('op1'),
-                        op2=request.data.get('op2'),
-                        op3=request.data.get('op3'),
-                        op4=request.data.get('op4'),
-                        integer_type_submission=request.data.get('int'),
-                        correct=correct,
 
-                    )
+                    if current_question.integer_type:
+
+                        QuestionResponse.objects.create(
+                            user=user,
+                            question=current_question,
+                            integer_type_submission=request.POST.get('int'),
+                            correct=correct,
+
+                        )
+                    elif current_question.single_option:
+                        QuestionResponse.objects.create(
+                            user=user,
+                            question=current_question,
+                            correct=correct,
+
+                        )
+                    else:
+                        QuestionResponse.objects.create(
+                            user=user,
+                            question=current_question,
+                            op1=request.POST.get('op1'),
+                            op2=request.POST.get('op2'),
+                            op3=request.POST.get('op3'),
+                            op4=request.POST.get('op4'),
+                            correct=correct,
+
+                        )
 
             # on the basis of jump making student move to next proper node
                 print('Current Node is', student_status.node)
@@ -126,8 +164,9 @@ class QuestionList(generics.GenericAPIView):
                     user, chapter, state, student_status.node, jump)
                 print('In post final call', outer_state, user, outer_node)
                 if outer_state == 6:
-                    return Response({
+                    return JsonResponse({
                         'status': False,
+                        'empty': True,
                         'detail': 'Assessment finished'
                     })
 
@@ -136,17 +175,17 @@ class QuestionList(generics.GenericAPIView):
                         user, chapter, outer_state, outer_node)
                     if question != 6:
                         print(' Post REQ current question instance', question)
-                        serializer = AssessmentQuestionSerializer(question)
-                        return Response(serializer.data)
-                        print('GET REQUEST DETAILS',
-                              current_chapter, state, node)
+                    qu = AssessmentQuestion.objects.filter(id=question.id)
+                    q_list = qu.values()
+
                     return Response({
-                        'status': False,
-                        'detail': 'Congrts, ASSESSMENT finished'
+                        'question_image': list(q_list),
+                        'empty': False
                     })
         else:
-            return Response({
+            return JsonResponse({
                 'status': False,
+                'empty': True,
                 'detail': 'Assessment not possible with POST. Try GET'
             })
 
@@ -167,7 +206,7 @@ class QuestionList(generics.GenericAPIView):
                 serializer = AssessmentQuestionSerializer(cquestion)
                 print('GET ALREADY DONE')
                 context = {
-                    'q': cquestion
+                    'currentquestion': cquestion
                 }
                 return render(request, 'kst/kst.html', context)
 
@@ -188,7 +227,7 @@ class QuestionList(generics.GenericAPIView):
                         serializer = AssessmentQuestionSerializer(question)
 
                         context = {
-                            'q': cquestion
+                            'currentquestion': cquestion
                         }
                         return render(request, 'kst/kst.html', context)
                     print('GET REQUEST DETAILS', current_chapter, state, node)

@@ -57,7 +57,8 @@ class QuestionResponse(models.Model):
     op2 = models.BooleanField(default=False)
     op3 = models.BooleanField(default=False)
     op4 = models.BooleanField(default=False)
-    integer_type_submission = models.CharField(blank=True, max_length=200)
+    integer_type_submission = models.CharField(
+        blank=True, max_length=200, null=True)
     correct = models.BooleanField(default=False)
 
     def __str__(self):
