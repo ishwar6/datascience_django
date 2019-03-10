@@ -167,7 +167,7 @@ class QuestionList(generics.GenericAPIView):
                 serializer = AssessmentQuestionSerializer(cquestion)
                 print('GET ALREADY DONE')
                 context = {
-                    'q': serializer.data
+                    'q': cquestion
                 }
                 return render(request, 'kst/kst.html', context)
 
@@ -188,10 +188,11 @@ class QuestionList(generics.GenericAPIView):
                         serializer = AssessmentQuestionSerializer(question)
 
                         context = {
-                            'q': serializer.data
+                            'q': cquestion
                         }
                         return render(request, 'kst/kst.html', context)
                     print('GET REQUEST DETAILS', current_chapter, state, node)
+
                 return Response({
                     'status': False,
                     'detail': 'Congrts, ASSESSMENT finished'
