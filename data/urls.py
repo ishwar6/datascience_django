@@ -9,7 +9,7 @@ admin.site.site_title = 'Personalized Learning Path'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('check/', include('kst.urls')),
+    path('check/', include('kst.urls', namespace='check')),
     path('states/', include('states.urls', namespace='content')),
 
 

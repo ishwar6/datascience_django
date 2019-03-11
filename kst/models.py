@@ -196,3 +196,22 @@ class Result(models.Model):
 
     def __str__(self):
         return str(self.user)
+
+
+class ResultNew(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    r1 = models.IntegerField(default=0)
+    r2 = models.IntegerField(default=0)
+    r3 = models.IntegerField(default=0)
+    r4 = models.IntegerField(default=0)
+    sr1 = models.IntegerField(default=0)
+    sr2 = models.IntegerField(default=0)
+    sr3 = models.IntegerField(default=0)
+    sr4 = models.IntegerField(default=0)
+    rr1 = models.IntegerField(default=0)
+    rr2 = models.IntegerField(default=0)
+    rr3 = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.user)

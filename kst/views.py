@@ -28,8 +28,44 @@ from states.models import *
 
 
 def base(request):
-    return render(request, 'kst/base.html')
+    return render(request, 'kst/map.html')
 
+
+def change(request):
+    sr1 = random.randint(30, 60)
+    sr2 = random.randint(40, 50)
+    sr3 = random.randint(50, 70)
+    sr4 = random.randint(10, 30)
+
+    r1 = random.randint(10, 40)
+    r2 = random.randint(10, 20)
+    r3 = random.randint(20, 40)
+    r4 = 100-r1-r2-r3
+
+    rr1 = random.randint(40, 50)
+    rr2 = random.randint(20, 50)
+    rr3 = 100-rr1-rr2
+
+
+    context = {
+        'r1': r1,
+        'r2': r2,
+        'r3': r3,
+        'r4': r4,
+        'sr1': sr1,
+        'sr2': sr2,
+        'sr3': sr3,
+        'sr4': sr4,
+
+
+        'rr1': rr1,
+        'rr2': rr2,
+        'rr3': rr3,
+        'time': datetime.datetime.now()
+
+
+    }
+    return render(request, 'kst/change.html', context)
 
 class QuestionList(generics.GenericAPIView):
 

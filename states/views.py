@@ -3,8 +3,9 @@ from kst.models import *
 from .models import *
 from kst.utils import *
 
-
-
+from django.http import JsonResponse
+from django.contrib import messages
+from kst.models import AssessmentQuestion as Question
 
 
 
@@ -561,21 +562,15 @@ def show_questions(request):
                 count                  = student_ques_point_overall + 1
 
                 questions_to_render = []
+            
+                if questions.exists():
+                    ques_now              = questions.first()
+                   
+                    questions_to_render.append(ques_now)
+
 
                 #### ADD FURTHER COUNTS HERE   # # # ## # ## # ## # # # # # # #  ### # #  # # # #  # #  #######
 
-                while(student_ques_point < score_of_ques_needed):
-                    print(student_ques_point, score_of_ques_needed)
-                    ques_now              = questions.filter(counts = count)
-                    if ques_now.exists():
-                        ques_now              = ques_now.first()
-                        student_ques_point    = student_ques_point + int(ques_now.difficulty) 
-                        count    = count + 1
-                        questions_to_render.append(ques_now)
-                        print(questions_to_render)
-                    
-                    else:
-                        break
 
                         # render very first question by GET request
                 number_of_questions     = len(questions_to_render)
@@ -730,8 +725,8 @@ def report(request):
                     student_state.save()
                 return redirect('content:active')
             count         = student_state.score_of_q
-            question_solved = QuestionResponse.objects.filter(Q(question__counts__lte = count) & Q( question__state = student_state.state ) )
-            i  = j = wi = wc = 0 
+            question_solved = []
+            i  = j = wi = wc = 1
         
 
             for a in question_solved:
@@ -743,11 +738,7 @@ def report(request):
                     wi = wi + int(a.question.difficulty)
 
             score =  (wc / (wc + wi)) * 100
-            duration     = timezone.now() - student_state.timestamp
-            days, seconds = duration.days, duration.seconds
-            time_taken = days * 24 + seconds // 3600
-            student_state.score = score
-            student_state.save()
+            
 
             if score >= 50:
                 if_old = CompletedState.objects.filter(Q(user = user) & Q(state = student_state.state))
@@ -762,8 +753,8 @@ def report(request):
                     success     = 1,
                     correct     = i,
                     incorrect   = j,
-                    time_taken  = time_taken,
-                    score       = score,
+                    time_taken  = 2,
+                    score       = 4,
                 )
             else:
                 if_old = PreviousState.objects.filter(Q(user = user) & Q(state = student_state.state))

@@ -1,0 +1,796 @@
+{% extends 'kst/base.html' %}
+
+
+{% block content %}
+
+
+{% load static %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<meta content=动画,html5,javascript name=keywords>
+<meta content="" name=description>
+<link href=favcion.ico rel=icon sizes=32x32>
+
+
+<style>
+    html,
+    body {
+        width: 99%;
+        background-color: #fff;
+        /*overflow-x: hidden;*/
+    }
+
+    .container {
+        margin: 10px auto;
+        width: 1300px;
+    }
+
+    .showcase {
+        margin: auto;
+        display: block;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+    }
+
+    svg text {
+        font-family: Verdana, arial;
+    }
+
+    #tooltip {
+        padding: 10px 20px;
+        font-family: Verdana, arial;
+        width: 240px;
+        height: auto;
+        position: absolute;
+        border: 1px solid black;
+        background-color: white;
+        border-radius: 5px;
+        opacity: 0.0;
+        left: 0;
+        top: 0;
+    }
+
+    #tooltip h2 {
+        font-size: 22px;
+        padding-bottom: 5px;
+    }
+
+    #tooltip p {
+        font-size: 14px;
+    }
+
+
+
+    .container_info {
+        margin: 10px auto;
+        width: 800px;
+    }
+
+
+    .show-header {
+        width: 800px;
+        height: 40px;
+        margin: 20px auto 30px;
+        display: block;
+    }
+
+    .show-header .show-header-left {
+        width: 480px;
+        height: 100%;
+        float: left;
+        font-family: Arial, sans-serif;
+        font-size: 42px;
+    }
+
+    .show-header .show-header-right {
+        box-sizing: border-box;
+        width: 260px;
+        height: 100%;
+        float: right;
+        text-align: right;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        padding: 10px 10px 2px 0px;
+    }
+
+
+    .show-info {
+        width: 100%;
+        padding: 5px 20px;
+        display: block;
+        font-size: 14px;
+        font-family: Arial, "Microsoft Yahei", simsun;
+        line-height: 24px;
+    }
+
+    .show-info h2 {
+        font-family: Arial, "Microsoft Yahei", simhei, simsun;
+        font-size: 18px;
+        margin-top: 1.5em;
+        margin-bottom: 1em;
+    }
+
+
+    .show-footer {
+        width: 100%;
+        margin: 20px auto 0px;
+        padding: 10px 0px;
+        text-align: center;
+        padding: 20px auto;
+        font-size: 14px;
+        font-family: arial, sans-serif, simsun;
+    }
+
+    a.link_studio {
+        color: blue;
+        text-decoration: none;
+    }
+
+    a.link_studio:hover {
+        text-decoration: underline;
+    }
+
+    /*! normalize.css v4.0.0 | MIT License | github.com/necolas/normalize.css */
+
+    /**
+ * 1. Change the default font family in all browsers (opinionated).
+ * 2. Prevent adjustments of font size after orientation changes in IE and iOS.
+ */
+
+    html {
+        font-family: sans-serif;
+        /* 1 */
+        -ms-text-size-adjust: 100%;
+        /* 2 */
+        -webkit-text-size-adjust: 100%;
+        /* 2 */
+    }
+
+    /**
+ * Remove the margin in all browsers (opinionated).
+ */
+
+    body {
+        margin: 0;
+    }
+
+    /* HTML5 display definitions
+   ========================================================================== */
+
+    /**
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in Edge, IE, and Firefox.
+ * 2. Add the correct display in IE.
+ */
+
+    article,
+    aside,
+    details,
+    /* 1 */
+    figcaption,
+    figure,
+    footer,
+    header,
+    main,
+    /* 2 */
+    menu,
+    nav,
+    section,
+    summary {
+        /* 1 */
+        display: block;
+    }
+
+    /**
+ * Add the correct display in IE 9-.
+ */
+
+    audio,
+    canvas,
+    progress,
+    video {
+        display: inline-block;
+    }
+
+    /**
+ * Add the correct display in iOS 4-7.
+ */
+
+    audio:not([controls]) {
+        display: none;
+        height: 0;
+    }
+
+    /**
+ * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+
+    progress {
+        vertical-align: baseline;
+    }
+
+    /**
+ * Add the correct display in IE 10-.
+ * 1. Add the correct display in IE.
+ */
+
+    template,
+    /* 1 */
+    [hidden] {
+        display: none;
+    }
+
+    /* Links
+   ========================================================================== */
+
+    /**
+ * Remove the gray background on active links in IE 10.
+ */
+
+    a {
+        background-color: transparent;
+    }
+
+    /**
+ * Remove the outline on focused links when they are also active or hovered
+ * in all browsers (opinionated).
+ */
+
+    a:active,
+    a:hover {
+        outline-width: 0;
+    }
+
+    /* Text-level semantics
+   ========================================================================== */
+
+    /**
+ * 1. Remove the bottom border in Firefox 39-.
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+
+    abbr[title] {
+        border-bottom: none;
+        /* 1 */
+        text-decoration: underline;
+        /* 2 */
+        text-decoration: underline dotted;
+        /* 2 */
+    }
+
+    /**
+ * Prevent the duplicate application of `bolder` by the next rule in Safari 6.
+ */
+
+    b,
+    strong {
+        font-weight: inherit;
+    }
+
+    /**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+
+    b,
+    strong {
+        font-weight: bolder;
+    }
+
+    /**
+ * Add the correct font style in Android 4.3-.
+ */
+
+    dfn {
+        font-style: italic;
+    }
+
+    /**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+
+    h1 {
+        font-size: 2em;
+        margin: 0.67em 0;
+    }
+
+    /**
+ * Add the correct background and color in IE 9-.
+ */
+
+    mark {
+        background-color: #ff0;
+        color: #000;
+    }
+
+    /**
+ * Add the correct font size in all browsers.
+ */
+
+    small {
+        font-size: 80%;
+    }
+
+    /**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+
+    sub,
+    sup {
+        font-size: 75%;
+        line-height: 0;
+        position: relative;
+        vertical-align: baseline;
+    }
+
+    sub {
+        bottom: -0.25em;
+    }
+
+    sup {
+        top: -0.5em;
+    }
+
+    /* Embedded content
+   ========================================================================== */
+
+    /**
+ * Remove the border on images inside links in IE 10-.
+ */
+
+    img {
+        border-style: none;
+    }
+
+    /**
+ * Hide the overflow in IE.
+ */
+
+    svg:not(:root) {
+        overflow: hidden;
+    }
+
+    /* Grouping content
+   ========================================================================== */
+
+    /**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+
+    code,
+    kbd,
+    pre,
+    samp {
+        font-family: monospace, monospace;
+        /* 1 */
+        font-size: 1em;
+        /* 2 */
+    }
+
+    /**
+ * Add the correct margin in IE 8.
+ */
+
+    figure {
+        margin: 1em 40px;
+    }
+
+    /**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+
+    hr {
+        box-sizing: content-box;
+        /* 1 */
+        height: 0;
+        /* 1 */
+        overflow: visible;
+        /* 2 */
+    }
+
+    /* Forms
+   ========================================================================== */
+
+    /**
+ * Change font properties to `inherit` in all browsers (opinionated).
+ */
+
+    button,
+    input,
+    select,
+    textarea {
+        font: inherit;
+    }
+
+    /**
+ * Restore the font weight unset by the previous rule.
+ */
+
+    optgroup {
+        font-weight: bold;
+    }
+
+    /**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ * 2. Show the overflow in Edge, Firefox, and IE.
+ */
+
+    button,
+    input,
+    /* 1 */
+    select {
+        /* 2 */
+        overflow: visible;
+    }
+
+    /**
+ * Remove the margin in Safari.
+ * 1. Remove the margin in Firefox and Safari.
+ */
+
+    button,
+    input,
+    select,
+    textarea {
+        /* 1 */
+        margin: 0;
+    }
+
+    /**
+ * Remove the inheritence of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritence of text transform in Firefox.
+ */
+
+    button,
+    select {
+        /* 1 */
+        text-transform: none;
+    }
+
+    /**
+ * Change the cursor in all browsers (opinionated).
+ */
+
+    button,
+    [type="button"],
+    [type="reset"],
+    [type="submit"] {
+        cursor: pointer;
+    }
+
+    /**
+ * Restore the default cursor to disabled elements unset by the previous rule.
+ */
+
+    [disabled] {
+        cursor: default;
+    }
+
+    /**
+ * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
+ *    controls in Android 4.
+ * 2. Correct the inability to style clickable types in iOS.
+ */
+
+    button,
+    html [type="button"],
+    /* 1 */
+    [type="reset"],
+    [type="submit"] {
+        -webkit-appearance: button;
+        /* 2 */
+    }
+
+    /**
+ * Remove the inner border and padding in Firefox.
+ */
+
+    button::-moz-focus-inner,
+    input::-moz-focus-inner {
+        border: 0;
+        padding: 0;
+    }
+
+    /**
+ * Restore the focus styles unset by the previous rule.
+ */
+
+    button:-moz-focusring,
+    input:-moz-focusring {
+        outline: 1px dotted ButtonText;
+    }
+
+    /**
+ * Change the border, margin, and padding in all browsers (opinionated).
+ */
+
+    fieldset {
+        border: 1px solid #c0c0c0;
+        margin: 0 2px;
+        padding: 0.35em 0.625em 0.75em;
+    }
+
+    /**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+
+    legend {
+        box-sizing: border-box;
+        /* 1 */
+        color: inherit;
+        /* 2 */
+        display: table;
+        /* 1 */
+        max-width: 100%;
+        /* 1 */
+        padding: 0;
+        /* 3 */
+        white-space: normal;
+        /* 1 */
+    }
+
+    /**
+ * Remove the default vertical scrollbar in IE.
+ */
+
+    textarea {
+        overflow: auto;
+    }
+
+    /**
+ * 1. Add the correct box sizing in IE 10-.
+ * 2. Remove the padding in IE 10-.
+ */
+
+    [type="checkbox"],
+    [type="radio"] {
+        box-sizing: border-box;
+        /* 1 */
+        padding: 0;
+        /* 2 */
+    }
+
+    /**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+
+    [type="number"]::-webkit-inner-spin-button,
+    [type="number"]::-webkit-outer-spin-button {
+        height: auto;
+    }
+
+    /**
+ * Correct the odd appearance of search inputs in Chrome and Safari.
+ */
+
+    [type="search"] {
+        -webkit-appearance: textfield;
+    }
+
+    /**
+ * Remove the inner padding and cancel buttons in Chrome on OS X and
+ * Safari on OS X.
+ */
+
+    [type="search"]::-webkit-search-cancel-button,
+    [type="search"]::-webkit-search-decoration {
+        -webkit-appearance: none;
+    }
+</style>
+
+
+<div class=container>
+
+    <div class=showcase><svg height=600 id=mindmap-svg width=1300></svg></div>
+</div>
+
+
+
+<script src=https://d3js.org/d3.v4.js> </script> <script>
+    function MindMap() {
+        function t() {
+            r(), a([0, 0]), e()
+        }
+
+        function e() {
+            var t = u.select(".gbutton");
+            t.empty() && (t = u.append("g").attr("class", "gbutton")), t.attr("transform", "translate(20,40)");
+            var e = u.select(".gstatus");
+            e.empty() && (e = u.append("g").attr("class", "gstatus")), e.attr("transform", "translate(35,88)"),
+                e.append(
+                    "text").attr("fill", "black").attr("font-size", 12).text("Successful !").style("fill-opacity",
+                    0);
+            t.append("rect").attr("x", 0).attr("y", 0).attr("width", 112).attr("height", 28).attr("rx", 5).attr(
+                "ry", 5).attr("fill", "purple").attr("stroke", "black").attr("stroke-width", .5), t.append(
+                "text").attr("dx", 112 * .1).attr("dy", 28 * .68).attr("fill", "white").attr("font-size", 12).text(
+                "Save on Server"), t.on("mouseover", function () {
+                t.select("rect").attr("fill", "yellow"), t.select("text").attr("fill", "purple"), t.style(
+                    "cursor", "pointer")
+            }).on("mouseout", function () {
+                t.select("rect").attr("fill", "purple"), t.select("text").attr("fill", "white")
+            }).on("mousedown", function () {
+                $.post("http://210.140.42.149:3000/save", p, function (t, r) {
+                    "success" == r ? e.select("text").text("Successful !").style("fill-opacity", 1)
+                        .transition().duration(1e3).style("fill-opacity", 0) : e.select("text").text(
+                            "Failed !").style("fill-opacity", 1).transition().duration(1e3).style(
+                            "fill-opacity", 0)
+                })
+            })
+        }
+
+        function r() {
+            x = d3.tree().size([360, 120]).separation(function (t, e) {
+                    return (t.parent == e.parent ? 1 : 2) / t.depth
+                }), g = d3.hierarchy(p), g.descendants().forEach(function (t, e) {
+                    t.data.closed = "true" == t.data.closed, t.data.closed && i(t)
+                }), m = u.select(".gmind"), m.empty() && (m = u.append("g").attr("class", "gmind")), v = m.select(
+                    ".glink"), v.empty() && (v = m.append("g").attr("class", "glink")), k = m.select(".gnode"), k.empty() &&
+                (k = m.append("g").attr("class", "gnode")), v.attr("transform", "translate(" + d / 2 + "," + f / 2 +
+                    ")"), k.attr("transform", "translate(" + d / 2 + "," + f / 2 + ")");
+            var t = d3.zoom().scaleExtent([.7, 2]).translateExtent([
+                [-.7 * d, -.7 * f],
+                [1.7 * d, 1.7 * f]
+            ]).on("zoom", function () {
+                var t = "scale(" + d3.event.transform.k + ")",
+                    e = "translate(" + d3.event.transform.x + "," + d3.event.transform.y + ")";
+                m.attr("transform", e + t)
+            });
+            u.call(t)
+        }
+
+        function n(t, e) {
+            var r = (t - 90) / 180 * Math.PI,
+                n = e;
+            return [n * Math.cos(r), n * Math.sin(r)]
+        }
+
+        function a(t) {
+            x(g), y = g.descendants(), h = g.links(), y.forEach(function (t) {
+                t.y = 120 * t.depth, t.pos = n(t.x, t.y)
+            });
+            for (var e = 0; e < y.length; e++) y[e].id || (y[e].id = b, b++);
+            for (var e = 0; e < h.length; e++)
+                h[e].id || (h[e].id = M, M++);
+            var r = d3.scaleLinear().domain([0, 180, 360]).range([1, .3, 1]),
+                o = d3.scaleLinear().domain([0,
+                    1, 5, 10
+                ]).range([13, 13, 6.5, 6.5]),
+                c = k.selectAll(".node").data(y, function (t) {
+                    return t.id
+                }),
+                u = c.enter(),
+                d = c.exit(),
+                f = u.append("g").attr("class", "node").attr("transform", function (e) {
+                    return "translate(" + t[0] + "," + t[1] + ")"
+                }).on("mousedown", function (t) {
+                    d3.event.defaultPrevented || (i(t), a(t.prevPos))
+                }).on("mouseover", function (t) {
+                    d3.select(this).style("cursor", "pointer").select("text").style("fill-opacity", 1)
+                }).on("mouseout", function (t) {
+                    d3.select(this).select("text").transition(600).style("fill-opacity", 0)
+                });
+            f.append("circle").attr("r", 0).style("fill", function (t) {
+                var e = "";
+                return t.depth > 1 ? (e =
+                        d3.hsl(t.parent.color), e = e.brighter(.5), e.l = r(t.x)) : e = t
+                    .depth > 0 ? d3.hsl(t.x, 1, .5) : "#FFFFFF", t.color = e + "", t.color + ""
+            }).style("stroke-width", 2).style("stroke", "black").style("opacity", 0), f.append("text").attr(
+                "dominant-baseline", "text-before-edge").attr("text-anchor", "middle").attr("font-size", 12).attr(
+                "dy", 13).text(function (t) {
+                var e = d3.rgb(t.color);
+                return l(e.r, e.g, e.b)
+            }).style("fill-opacity", 0);
+            var p = f.merge(c).transition().duration(600).attr("transform", function (t) {
+                return "translate(" + t.pos[0] + "," + t.pos[1] + ")"
+            });
+            p.select("circle").attr("r", function (t) {
+                return o(t.depth)
+            }).style("opacity", 1), p.select("text").attr("dy", function (t) {
+                return o(t.depth)
+            }).style("fill-opacity", 0);
+            var m = d.transition().duration(600).attr("transform", function (e) {
+                return "translate(" + t[0] + "," + t[1] + ")"
+            }).remove();
+            m.select("circle").style("opacity", 0).attr("r", 0), m.select("text").style("fill-opacity", 0);
+            var w = v.selectAll(".link").data(h, function (t) {
+                    return t.target.id
+                }),
+                F = w.enter(),
+                z = w.exit();
+            F.append("path").attr("class", "link").attr("fill", "none").attr("stroke",
+                "rgba(20,20,20,0.2)").attr(
+                "stroke-width", 1).attr("opacity", 0).attr("d", function (e) {
+                var r = {
+                    x: t[0],
+                    y: t[1]
+                };
+                return s({
+                    source: r,
+                    target: r
+                })
+            }).merge(w).transition().duration(600).attr("opacity", 1).attr("d", function (t) {
+                var e = {
+                        x: t.source.pos[0],
+                        y: t.source.pos[1]
+                    },
+                    r = {
+                        x: t.target.pos[0],
+                        y: t.target.pos[1]
+                    };
+                return "M" + e.x + "," + e.y + "L" + r.x + "," + r.y
+            }), z.transition().duration(600).attr("opacity", 0).attr("d", function (e) {
+                var r = {
+                        x: t[0],
+                        y: t[1]
+                    },
+                    n = {
+                        x: t[0],
+                        y: t[1]
+                    };
+                return "M" + r.x + "," + r.y + "L" + n.x + "," + n.y
+            }).remove(), y.forEach(function (t) {
+                t.prevPos = [t.pos[0], t.pos[1]]
+            })
+        }
+
+        function o() {}
+
+        function s(t) {
+            return "M" + t.source.x + "," + t.source.y + "C" + (t.source.x + t.target.x) / 2 + "," + t.source.y +
+                " " + (t.source.x + t.target.x) / 2 + "," + t.target.y + " " + t.target.x + "," + t.target.y
+        }
+
+        function i(t) {
+            t.children ? (t._children = t.children, t.children = null, t.data.closed = !0) : (t.children =
+                t._children,
+                t._children = null, t.data.closed = !1)
+        }
+
+        function l(t, e, r) {
+            return c(t) + c(e) + c(r)
+        }
+
+        function c(t) {
+            return t = parseInt(t, 10), isNaN(t) ? "00" : (t = Math.max(0, Math.min(t, 255)),
+                "0123456789ABCDEF".charAt(
+                    (t - t % 16) / 16) + "0123456789ABCDEF".charAt(t % 16))
+        }
+        var u, d, f, p, y, h, x, g, m, v, k, b = 0,
+            M = 0;
+        this.svg = function (t) {
+            if (arguments.length < 1) return u;
+            u = t
+        }, this.data = function (t) {
+            if (arguments.length < 1)
+                return p;
+            p = t
+        }, this.size = function (t, e) {
+            if (arguments.length < 2) return [d, f];
+            d = t, f = e
+        }, this.getRoot = function () {
+            return g
+        }, this.render = t, this.update = o
+    }
+</script>
+<script>
+    ! function () {
+        var n = d3.select("#mindmap-svg"),
+            t = n.attr("width"),
+            a = n.attr("height"),
+            d = new MindMap;
+        d.svg(n), d.size(t, a), d3.json("/static/kst/js/graph.json", function (n, t) {
+            n ? d3.json("/static/kst/js/graph.json", function (n, t) {
+                if (n) throw n;
+                d.data(t), d.render()
+            }) : (d.data(t), d.render())
+        })
+    }()
+</script>
+
+{% endblock %}
