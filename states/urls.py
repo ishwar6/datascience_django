@@ -4,7 +4,7 @@ from django.conf.urls import url
 app_name = 'states'
 
 urlpatterns = [
-    path('', learning, name='learning'),
+
 
 
     url(
