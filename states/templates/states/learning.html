@@ -1,0 +1,18 @@
+{% extends 'kst/base.html' %}
+
+
+{% block content %}
+
+
+
+<div class="jumbotron">
+    <h1 class="display-4">Hello, {{user}}</h1>
+    <p class="lead">Here your learning starts with {{chapter}}</p>
+    <hr class="my-4">
+    <p>You are currently in {{state}} of {{node}} </p>
+    <p class="lead">
+        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    </p>
+</div>
+
+{% endblock %}

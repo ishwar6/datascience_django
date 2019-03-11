@@ -18,6 +18,11 @@ def learning(request):
                     return redirect('check:result')
                 else:
                     print(state, node)
+                    context = {
+                        'chapter': current_chapter,
+                        'state': state,
+                        'node': node
+                    }
                     return render(request, 'states/learning.html', context)
 
         pass
