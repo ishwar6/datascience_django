@@ -1,0 +1,62 @@
+{% extends 'chapters/base.html' %}
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" media="screen" href="{% static 'content/css/learningContent.css' %}" />
+<div class="learningContent">
+    <div class="ciq-info">
+        <h1>{{content.state.title|safe}}</h1>
+        <p class="time-info">
+            {{content.time}}min read
+        </p>
+    </div>
+    <div class="learningContent-a">
+
+        {% if content.text %}
+        {{content.text|safe}}
+        {% endif %}
+        {% if content.image %}
+        <div class="learningContent-img">
+            <img src="http://127.0.0.1:8000/media/{{content.image}}" alt="">
+        </div>
+        {% endif %}
+        {% if content.image2 %}
+        <div class="learningContent-img">
+            <img src="http://127.0.0.1:8000/media/{{content.image2}}" alt="">
+        </div>
+        {% endif %}
+    </div>
+
+
+    <div class="nextContent">
+        <button class="nextContentBtn" onclick="openNextConfirmation() " type="button">Next Page</button>
+        <div class="next-content-confirmation">
+            <p>You have to very sure before moving to next page.</p>
+            <div>
+                <button type="button" onclick="closeNextConfirmation() " class="cancelBtn">Not read yet!</button>
+                <form class="normalForm" method="POST" action="{% url 'content:show-content' %}">
+                    {% csrf_token %}
+                    <button class="nextContentBtn-submit" type="submit">Next Page</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+    <script>
+        function openNextConfirmation() {
+            console.log("it ran")
+            document.querySelector('.next-content-confirmation').classList.add('next-content-confirmation-active')
+        }
+        function closeNextConfirmation() {
+            console.log("it ran")
+            document.querySelector('.next-content-confirmation').classList.remove('next-content-confirmation-active')
+        }
+    </script>
+
+
+</div>
+{% block javascript %}
+<script src="{% static 'content/js/learningContent.js' %}"></script>
+{% endblock %}
+{% endblock %}

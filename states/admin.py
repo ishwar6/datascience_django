@@ -42,3 +42,10 @@ admin.site.register(Node, NodeAdmin)
 
 admin.site.register(Chapter)
 admin.site.register(Content, ContentAdmin)
+
+admin.site.register(PreviousState)
+admin.site.register(CurrentActiveState)
+admin.site.register(CompletedState)
+admin.site.register(CurrentActiveNode)
+admin.site.register(PreviousActiveNode)
+admin.site.register(CompletedChapter)

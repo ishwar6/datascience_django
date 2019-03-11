@@ -45,9 +45,8 @@ def change_chapter(request):
             student_state       = student_state_.first()
 # to get current chapter and to save it in completedchapter
             state               = student_state.state.id
-            current_topic       = State.objects.filter(pk = state).first().topic
-            current_chapter_pk  = Topic.objects.filter(title = current_topic).first().chapter.id
-            current_chapter     = Chapter.objects.filter(pk = current_chapter_pk).first()
+
+            current_chapter     = student_state.chapter
             temp_active_node    = TempActiveNode.objects.filter(user = user)
                 # to access practice chapter from userstates nodes
 
@@ -397,7 +396,7 @@ def assignstate(request, id, s):
 
             if s == 1:
                 forward = u.outer_fringe(active_node)
-                chapter_id   = student_state.state.topic.chapter.id
+                chapter_id   = student_state.state.chapter.id
                 
                
 
@@ -894,7 +893,7 @@ def previous_content(request):
             a = node.node
 
         for state in a.state_node.all():
-            print(state.title, state.topic)
+            print(state.title, state)
 
     return True
 
