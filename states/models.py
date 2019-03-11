@@ -92,6 +92,10 @@ class State(models.Model):
 
     def __str__(self):
         return self.tag
+    def score_of_i(self):
+        return 1
+    def score_of_q(self):
+        return 1
 
 
 

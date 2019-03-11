@@ -54,7 +54,7 @@ def change_chapter(request):
                 'left_chapters'      : a,
                 'current_chapter'    : current_chapter, 
             }
-            return render(request, 'content/chapter.html', context )
+            return render(request, 'states/chapter.html', context )
 
 
 # import Checksum
@@ -86,7 +86,7 @@ def change_chapter(request):
 
      
 
-#         return render(request, 'content/chapter.html', context )
+#         return render(request, 'states/chapter.html', context )
 
 
 
@@ -278,7 +278,7 @@ def change_active_state(request, fav_state, fav_node, student_state = None ,   a
 
 def dashboard(request):
     if request.user.is_authenticated:
-        return render(request, 'content/dashboard.html', {})
+        return render(request, 'states/dashboard.html', {})
 
 
 
@@ -287,7 +287,7 @@ def Diff(li1, li2):
 
 
 def problem(request):
-    return render(request, 'content/error.html', {})
+    return render(request, 'states/error.html', {})
 
 
 def active_part_redirect(request):
@@ -433,7 +433,7 @@ def showcontent(request):
 
 
 
-    return render(request, 'content/page.html' , context)
+    return render(request, 'states/page.html' , context)
 
 
 
@@ -513,7 +513,7 @@ def show_illustrations(request, content = None):
             return redirect('content:questions')
 
 
-    return render(request, 'content/illus.html', context)
+    return render(request, 'states/illus.html', context)
 
        
 
@@ -602,7 +602,7 @@ def show_questions(request):
 
                 }
 
-                return render(request, 'content/ques.html', context)
+                return render(request, 'states/ques.html', context)
 
 
 
@@ -847,7 +847,7 @@ def report(request):
                 }
             print(context)
 
-    return render(request, 'content/report.html', context)
+    return render(request, 'states/report.html', context)
 
 
 

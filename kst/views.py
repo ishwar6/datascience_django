@@ -296,19 +296,45 @@ def result(request):
         s = StudentStatus.objects.filter(user = user)
         if s.exists():
             s.delete()
-        current_chapter = chapter_switch(request.user)
+        a = CurrentActiveState.objects.filter(user = request.user)
+        if a.exists():
+            state = a.first().state
+            current_chapter = state.chapter
+        b = CurrentActiveNode.objects.filter(user = request.user)
+        if b.exists():
+            node = b.first().node
+
+        if not a.exists() and not b.exists():
         
 
-        if current_chapter:
-            print('current chapter Learning', current_chapter)
-            if current_chapter == -1:
-                print("no further chaper")
-                return redirect('check:result')
-            else:
+            current_chapter = chapter_switch(request.user)
+            
 
-                state, node = getNodeState(current_chapter, request.user)
-                if state == 6:
+            if current_chapter:
+                print('current chapter Learning', current_chapter)
+                if current_chapter == -1:
+                    print("no further chaper")
                     return redirect('check:result')
+                else:
+
+                    state, node = getNodeState(current_chapter, request.user)
+                    if state == 6:
+                        return redirect('check:result')
+                    else:
+                        a = CurrentActiveState.objects.filter(user = request.user)
+                        if a.exists():
+                            a.delete()
+                        b = CurrentActiveNode.objects.filter(user = request.user)
+                        if b.exists():
+                            b.delete()
+                        CurrentActiveState.objects.create(
+                            user = request.user,
+                            state = state
+                        )
+                        CurrentActiveNode.objects.create(
+                            user = request.user,
+                            node = node
+                        )
                
                     
        
