@@ -274,12 +274,16 @@ def getNode(request):
     return render(request, 'index.html', context)
 
 
+
+
 def result(request):
     user = request.user
 
     if not request.user.is_authenticated:
         return reverse('account:login')
     else:
+        
+        
         cquestion = CurrentQuestion.objects.filter(user=request.user)
         if cquestion.exists():
                 if not cquestion.first().assess:
@@ -287,9 +291,28 @@ def result(request):
         else:
                 
             return redirect('check:start')
+        
+
         s = StudentStatus.objects.filter(user = user)
         if s.exists():
             s.delete()
+        current_chapter = chapter_switch(request.user)
+        
+
+        if current_chapter:
+            print('current chapter Learning', current_chapter)
+            if current_chapter == -1:
+                print("no further chaper")
+                return redirect('check:result')
+            else:
+
+                state, node = getNodeState(current_chapter, request.user)
+                if state == 6:
+                    return redirect('check:result')
+               
+                    
+       
+       
 
         result = Result.objects.filter(user = request.user)
         if result.exists():
@@ -308,7 +331,10 @@ def result(request):
                     'rr1': result.rr1,
                     'rr2': result.rr2,
                     'rr3': result.rr3,
-                    'time': datetime.datetime.now()
+                    'time': datetime.datetime.now(),
+                      'chapter': current_chapter,
+                        'state': state,
+                        'node': node,
 
 
                    }
