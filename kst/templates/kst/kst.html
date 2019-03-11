@@ -11,9 +11,17 @@
 <div class="assessmentQuestions">
 
     <div class="assessmentQuestions-a">
-        <h2>{{ chapter_title }}</h2>
+
+
+        <p class="lead">
+            Attempt each question carefully! This will let us create your own dynamic <mark>personalised learning</mark>
+            Path
+        </p>
+        <br>
         <div class="assessmentQuestions-content">
-            <h3>{{currentquestion.id}}</h3>
+            <h2 class="lead">State you're solving: {{currentquestion.state}}</h2>
+            <br>
+            <h3 class="d-inline p-2 bg-primary text-white" style="width:60px;">{{currentquestion.id}}</h3>
             <p>{{currentquestion.text }} </p>
             {% if currentquestion.question_image %}
             <img id='image-question' src=" {{ currentquestion.question_image.url }}" height="250px" width="250px">
@@ -59,7 +67,12 @@
             </div>
         </form>
     </div>
+
 </div>
+<blockquote class="blockquote text-center">
+    <p class="mb-0">Until you are sure where you're going, you can't be there!</p>
+    <footer class="blockquote-footer">Robin Sharma <cite title="Source Title">5 AM Club</cite></footer>
+</blockquote>
 {% block javascript %}
 <script src="{% static 'kst/js/assessmentQuestions.js' %}"></script>
 {% endblock %}

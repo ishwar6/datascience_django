@@ -180,6 +180,8 @@ class CurrentQuestion(models.Model):
 
 
 class Result(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     r1 = models.IntegerField(default=0)
     r2 = models.IntegerField(default=0)
     r3 = models.IntegerField(default=0)
@@ -191,3 +193,6 @@ class Result(models.Model):
     rr1 = models.IntegerField(default=0)
     rr2 = models.IntegerField(default=0)
     rr3 = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.user)

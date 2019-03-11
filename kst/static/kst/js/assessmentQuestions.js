@@ -113,11 +113,11 @@ function addInputs(responseData) {
         `;
   }
   document.querySelector(".assessmentQuestions-content").innerHTML = `
-    <h3>${responseData.id}</h3>
-      <p>${responseData.text} </p>
-      ${responseData.question_image.length > 0 &&
-        '<img id ="image-question" src="${responseData.question_image}" height="250px" width="250px">'}
-    `;
+
+  <br>
+
+    <h3 class="d-inline p-2 bg-primary text-white" style="width:60px;">${responseData.id}</h3>
+      <p>${responseData.text} </p>`;
 }
 
 $(document).ready(function() {
@@ -140,9 +140,9 @@ $(document).ready(function() {
   let responseData = null;
   function handleFormSuccess(data, textStatus, jqXHR) {
     console.log(data);
-    // if (data.empty) {
-    //   window.location.href = "/userstates/report/";
-    // }
+    if (data.empty) {
+      window.location.href = "/check/result/assessment/";
+    }
 
     responseData = data.question_image[0];
     console.log(responseData, data);

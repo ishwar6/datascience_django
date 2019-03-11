@@ -23,7 +23,7 @@ from states.models import *
 
 
 # models import
-from .models import AssessmentQuestion, QuestionResponse
+from .models import *
 from states.models import *
 
 
@@ -275,36 +275,93 @@ def getNode(request):
 
 
 def result(request):
-    sr1 = random.randint(30, 60)
-    sr2 = random.randint(40, 50)
-    sr3 = random.randint(50, 70)
-    sr4 = random.randint(10, 30)
+    user = request.user
 
-    r1 = random.randint(10, 40)
-    r2 = random.randint(10, 20)
-    r3 = random.randint(20, 40)
-    r4 = 100-r1-r2-r3
+    if not request.user.is_authenticated:
+        return reverse('account:login')
+    else:
+        cquestion = CurrentQuestion.objects.filter(user=request.user)
+        if cquestion.exists():
+                if not cquestion.first().assess:
+                    return redirect('check:start')
+        else:
+                
+            return redirect('check:start')
+        s = StudentStatus.objects.filter(user = user)
+        if s.exists():
+            s.delete()
 
-    rr1 = random.randint(40, 50)
-    rr2 = random.randint(20, 50)
-    rr3 = 100-rr1-rr2
-
-    context = {
-        'r1': r1,
-        'r2': r2,
-        'r3': r3,
-        'r4': r4,
-        'sr1': sr1,
-        'sr2': sr2,
-        'sr3': sr3,
-        'sr4': sr4,
-
-
-        'rr1': rr1,
-        'rr2': rr2,
-        'rr3': rr3,
-        'time': datetime.datetime.now()
+        result = Result.objects.filter(user = request.user)
+        if result.exists():
+            result = result.first()
+            context = {
+                    'r1': result.r1,
+                    'r2': result.r2,
+                    'r3': result.r3,
+                    'r4': result.r4,
+                    'sr1': result.sr1,
+                    'sr2': result.sr2,
+                    'sr3': result.sr3,
+                    'sr4': result.sr4,
 
 
-    }
+                    'rr1': result.rr1,
+                    'rr2': result.rr2,
+                    'rr3': result.rr3,
+                    'time': datetime.datetime.now()
+
+
+                   }
+        else:
+
+            sr1 = random.randint(30, 60)
+            sr2 = random.randint(40, 50)
+            sr3 = random.randint(50, 70)
+            sr4 = random.randint(10, 30)
+
+            r1 = random.randint(10, 40)
+            r2 = random.randint(10, 20)
+            r3 = random.randint(20, 40)
+            r4 = 100-r1-r2-r3
+
+            rr1 = random.randint(40, 50)
+            rr2 = random.randint(20, 50)
+            rr3 = 100-rr1-rr2
+
+            Result.objects.create(
+                user=request.user,
+                r1=r1,
+                r2=r2,
+                r3=r3,
+                r4=r4,
+                sr1=sr1,
+                sr2=sr2,
+                sr3=sr3,
+                sr4=sr4,
+
+                rr1=rr1,
+                rr2=rr2,
+                rr3=rr3,
+            )
+
+            context = {
+                'r1': r1,
+                'r2': r2,
+                'r3': r3,
+                'r4': r4,
+                'sr1': sr1,
+                'sr2': sr2,
+                'sr3': sr3,
+                'sr4': sr4,
+
+
+                'rr1': rr1,
+                'rr2': rr2,
+                'rr3': rr3,
+                'time': datetime.datetime.now()
+
+
+            }
+
+    
     return render(request, 'kst/result.html', context)
