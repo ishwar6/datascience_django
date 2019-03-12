@@ -99,6 +99,7 @@ def getUnsolvedQLoop(user, chapter, state, node):
 ###########################__________ GET NODE_STATE___________######################################
 
 
+
 def getNodeState(new_chapter = None, user = None):
     ''' It Gives appropriater Node and State of the new_chapter passed 
     in the function depending on total nodes present in the
