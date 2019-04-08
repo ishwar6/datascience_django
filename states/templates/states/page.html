@@ -4,10 +4,14 @@
 {% block content %}
 
 {% load static %}
+
 <link rel="stylesheet" type="text/css" media="screen" href="{% static 'states/css/learningContent.css' %}" />
+{% if content %}
 <div class="learningContent">
     <div class="ciq-info">
+
         <h1>{{content.state.title|safe}}</h1>
+
         <p class="time-info">
             {{content.time}}min read
         </p>
@@ -59,6 +63,11 @@
 
 
 </div>
+
+{% else %}
+<h5 class="p-1 m-2">Current Active State: <marK>{{state}}</marK> with topic <mark>{{state.title}}</mark></h5>
+<h4 class="p-2 m-4"><u>No content Present currently for this chapter! Will be updated soon!</u></h4>
+{% endif %}
 {% block javascript %}
 <script src="{% static 'states/js/learningContent.js' %}"></script>
 {% endblock %}

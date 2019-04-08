@@ -127,7 +127,7 @@ def switch_chapter(request, id = None, s=0):
             if temp_node.dont_know_switch ==1:
                 # if he don't know the chapter assign the very first state else go to outer fringe
                 
-                fav_state, fav_node = u.first_state_and_node(chapter)
+                fav_state, fav_node = getNodeState(chapter)
                 chapter_save(request, id, 0, fav_node)
                 change_previous_state(request, student_state)
                 change_active_state(request, fav_state, fav_node , student_state, active_node)
@@ -337,7 +337,7 @@ def assignstate(request, id, s):
             fav_node = None
 
             if s == 0:
-                back = u.inner_fringe(active_node)
+                back = outer_fringe(active_node)
                 print(back)
                 new_state = State.objects.filter(id = id).first()
                 if len(back)==0:
@@ -352,25 +352,25 @@ def assignstate(request, id, s):
 
 
 
-                with transaction.atomic():
-                    PreviousActiveNode.objects.create(  
-                        user = user,
-                        node = active_node
-                    )
-                    
-                    CurrentActiveNode.objects.filter(user = user).delete()
-                    CurrentActiveNode.objects.create(
-                        user = user,
-                        node = fav_node
-                    )
-                    student_state_.delete()
-                    CurrentActiveState.objects.create(
-                        user = user,
-                        state = new_state,
-                            )
+            
+                PreviousActiveNode.objects.create(  
+                    user = user,
+                    node = active_node
+                )
+                
+                CurrentActiveNode.objects.filter(user = user).delete()
+                CurrentActiveNode.objects.create(
+                    user = user,
+                    node = fav_node
+                )
+                student_state_.delete()
+                CurrentActiveState.objects.create(
+                    user = user,
+                    state = new_state,
+                        )
 
             if s == 1:
-                forward = u.outer_fringe(active_node)
+                forward = outer_fringe(active_node)
                 chapter_id   = student_state.state.chapter.id
                 
                
@@ -779,7 +779,7 @@ def report(request):
                 a = None
 
             
-        # back_ = u.outer_fringe(chapter, active_node)
+        # back_ = outer_fringe(chapter, active_node)
     
 
             context = {
@@ -806,7 +806,7 @@ def report(request):
             if score >= 50:
                 upgrade = True
                 success = 1
-                states =  u.outer_fringe_states(active_node)
+                states =  outer_fringe(active_node)
                 print(states)
 
                 if states is None:
@@ -819,7 +819,7 @@ def report(request):
                 upgrade = False
                 success = 0
 
-                states =  u.inner_fringe_states(active_node)
+                states =  outer_fringe(active_node)
                 if len(states)==0:
                     list_student_know = []
                     for a in active_node.state_node.all():
@@ -833,7 +833,7 @@ def report(request):
             context = {
             'states' : states,
             'state'  : student_state.state,
-            'upgrade': upgrade,
+            'upgrade': True,
             'success' : success,
                 }
             print(context)

@@ -1,4 +1,12 @@
+{% extends 'kst/base.html' %}
 
+
+{% block content %}
+
+<form method="POST" action={% url 'content:report' %}>
+    {% csrf_token %}
+    <button class="b-3" type="submit">Go Further to next state</button>
+</form>
 <h1>You are in {{state}}</h1>
 
 {% if question_solved %}
@@ -10,47 +18,47 @@
 
 <p> You started on {{time}}</p>
 <ul>
-{% for a in question_solved  %}
+    {% for a in question_solved %}
 
-<li>
-<p>Question: {{a.question}}  </p>
+    <li>
+        <p>Question: {{a.question}} </p>
 
-<p> Answer Given by you:
-   {% if a.op1 %}
-     A
-   {% endif %}
+        <p> Answer Given by you:
+            {% if a.op1 %}
+            A
+            {% endif %}
 
 
-   {% if a.op2 %}
-   B
- {% endif %}
+            {% if a.op2 %}
+            B
+            {% endif %}
 
- {% if a.op3 %}
- C
-{% endif %}
+            {% if a.op3 %}
+            C
+            {% endif %}
 
-{% if a.op4 %}
-D
-{% endif %}
+            {% if a.op4 %}
+            D
+            {% endif %}
 
-{% if a.integer_type_submission %}
-{{a.integer_type_submission}}
+            {% if a.integer_type_submission %}
+            {{a.integer_type_submission}}
 
-{% endif %}
+            {% endif %}
 
-</p>
+        </p>
 
-<p>
-{% if a.correct %}
-Your answer for this was Correct
-{% else %}
+        <p>
+            {% if a.correct %}
+            Your answer for this was Correct
+            {% else %}
 
-Your answer was incorrect
+            Your answer was incorrect
 
-{% endif %}
-</p>
-</li>
-{% endfor %}
+            {% endif %}
+        </p>
+    </li>
+    {% endfor %}
 
 </ul>
 
@@ -66,10 +74,6 @@ Practice Questions Solved : {{result.practice}}
 {% endif %}
 
 
-<form method="POST" action = {% url 'content:report' %}>
-{% csrf_token %}
-    <input type="submit">
-</form>
 
 
 {% endif %}
@@ -81,7 +85,8 @@ Practice Questions Solved : {{result.practice}}
 
 {% if upgrade %}
 
-<h3> Congrts! your states are upgraded. Please select any one of the state with which you want to continue further. </h3>
+<h3> Congrts! your states are upgraded. Please select any one of the state with which you want to continue further.
+</h3>
 
 {% else %}
 
@@ -95,16 +100,19 @@ Practice Questions Solved : {{result.practice}}
 {% for b in states %}
 
 
-                        <a href="{% url 'content:assign' b.id success %}"> {{b}} </a> <br>
-
-
-                    
-      
+<a href="{% url 'content:assign' b.id success %}"> {{b}} </a> <br>
 
 
 
 
 
-{% endfor  %}
+
+
+
+
+{% endfor %}
 
 {% endif %}
+
+
+{% endblock %}
